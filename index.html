@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scoreboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: black;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .scoreboard {
+            text-align: center;
+            padding: 20px;
+            border: 5px solid red;
+            border-radius: 15px;
+            width: 400px;
+            background-color: #111;
+        }
+        .time {
+            font-size: 3rem;
+            margin-bottom: 20px;
+        }
+        .teams {
+            display: flex;
+            justify-content: space-between;
+            margin: 20px 0;
+        }
+        .team {
+            flex: 1;
+            text-align: center;
+        }
+        .team-name {
+            font-size: 2rem;
+        }
+        .score {
+            font-size: 3rem;
+            margin: 10px 0;
+            color: #ff0000;
+        }
+        .buttons {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+        button {
+            font-size: 1.2rem;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            background-color: #007bff;
+            color: white;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .control-buttons {
+            margin-top: 20px;
+        }
+        .control-buttons button {
+            background-color: #ff4b5c;
+        }
+        .control-buttons button:hover {
+            background-color: #d90429;
+        }
+    </style>
+</head>
+<body>
+    <div class="scoreboard">
+        <div class="time" id="time">00:00</div>
+        <div class="teams">
+            <div class="team" id="home">
+                <div class="team-name">HOME</div>
+                <div class="score" id="score-home">0</div>
+                <div class="buttons">
+                    <button onclick="updateScore('home', 1)">+</button>
+                    <button onclick="updateScore('home', -1)">-</button>
+                </div>
+            </div>
+            <div class="team" id="away">
+                <div class="team-name">AWAY</div>
+                <div class="score" id="score-away">0</div>
+                <div class="buttons">
+                    <button onclick="updateScore('away', 1)">+</button>
+                    <button onclick="updateScore('away', -1)">-</button>
+                </div>
+            </div>
+        </div>
+        <div class="control-buttons">
+            <button onclick="startTimer()">START</button>
+            <button onclick="stopTimer()">STOP</button>
+            <button onclick="resetTimer()">RESET</button>
+        </div>
+    </div>
+    <script>
+        let homeScore = 0;
+        let awayScore = 0;
+        let timerInterval;
+        let seconds = 0;
+
+        function updateScore(team, value) {
+            if (team === 'home') {
+                homeScore = Math.max(0, homeScore + value);
+                document.getElementById('score-home').textContent = homeScore;
+            } else if (team === 'away') {
+                awayScore = Math.max(0, awayScore + value);
+                document.getElementById('score-away').textContent = awayScore;
+            }
+        }
+
+        function startTimer() {
+            if (timerInterval) return; // Prevent multiple intervals
+            timerInterval = setInterval(() => {
+                seconds++;
+                updateTimerDisplay();
+            }, 1000);
+        }
+
+        function stopTimer() {
+            clearInterval(timerInterval);
+            timerInterval = null;
+        }
+
+        function resetTimer() {
+            stopTimer();
+            seconds = 0;
+            updateTimerDisplay();
+        }
+
+        function updateTimerDisplay() {
+            const minutes = String(Math.floor(seconds / 60)).padStart(2, '0');
+            const sec = String(seconds % 60).padStart(2, '0');
+            document.getElementById('time').textContent = `${minutes}:${sec}`;
+        }
+    </script>
+</body>
+</html>
